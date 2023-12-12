@@ -3,10 +3,15 @@ package main
 import (
 	"flag"
 	"log"
+	"urlshortener/clients/telegram"
+)
+
+const (
+	tgBotHost = "api.telegram.org"
 )
 
 func main() {
-	tgClient = telegram.New(token)
+	tgClient = telegram.New(tgBotHost, mustToken())
 
 	fetcher = fetcher.New()
 }

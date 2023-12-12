@@ -40,6 +40,7 @@ func (c *Client) SendMessage(chatID int, text string) error {
 	if err != nil {
 		return e.Wrap("cant send", err)
 	}
+	return nil
 }
 
 func newBasePath(token string) string {
