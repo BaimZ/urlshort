@@ -20,6 +20,11 @@ type Storage struct {
 	basePath string
 }
 
+// IsExists implements storage.Storage.
+func (Storage) IsExists(p *storage.Page) (bool, error) {
+	panic("unimplemented")
+}
+
 func New(basePath string) Storage {
 	return Storage{basePath: basePath}
 }

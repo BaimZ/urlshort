@@ -3,22 +3,37 @@ package main
 import (
 	"flag"
 	"log"
-	"urlshortener/clients/telegram"
+
+	tgClient "urlshortener/clients/telegram"
+	event_consumer "urlshortener/consumer/event-consumer"
+	"urlshortener/events/telegram"
+
+	"urlshortener/storage/files"
 )
 
 const (
-	tgBotHost = "api.telegram.org"
+	tgBotHost   = "api.telegram.org"
+	storagePath = "files_storage"
+	batchSize   = 100
 )
 
 func main() {
-	tgClient := telegram.New(tgBotHost, mustToken())
+	eventsProcessor := telegram.New(
+		tgClient.New(tgBotHost, mustToken()),
+		files.New(storagePath),
+	)
 
-	//fetcher = fetcher.New()
+	log.Print("service started")
+	consumer := event_consumer.New(eventsProcessor, eventsProcessor, batchSize)
+
+	if err := consumer.Start(); err != nil {
+		log.Fatal("service is stopped", err)
+	}
 }
 
 func mustToken() string {
 	token := flag.String(
-		"token-bot-token",
+		"tg-bot-token",
 		"",
 		"token for access to tgbot",
 	)
@@ -26,5 +41,5 @@ func mustToken() string {
 	if *token == "" {
 		log.Fatal("token is empty")
 	}
-
+	return *token
 }
