@@ -1,6 +1,7 @@
 package files
 
 import (
+	"context"
 	"encoding/gob"
 	"errors"
 	"fmt"
@@ -25,7 +26,7 @@ func (Storage) IsExists(p *storage.Page) (bool, error) {
 	panic("unimplemented")
 }
 
-func New(basePath string) Storage {
+func New(ctx context.Context, basePath string) Storage {
 	return Storage{basePath: basePath}
 }
 
